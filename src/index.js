@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import './utils/prototypes'
 
 import CountryData from './CountryData.js';
+import PhoneNumber from "./PhoneNumber";
 
 class PhoneInput extends React.Component {
   static propTypes = {
@@ -41,6 +42,7 @@ class PhoneInput extends React.Component {
     className: PropTypes.string,
 
     autoFormat: PropTypes.bool,
+    googleAutoFormat: PropTypes.bool,
 
     enableAreaCodes: PropTypes.oneOfType([
       PropTypes.bool,
@@ -130,6 +132,7 @@ class PhoneInput extends React.Component {
     className: '',
 
     autoFormat: true,
+    googleAutoFormat: false,
     enableAreaCodes: false,
     enableTerritories: false,
     disableCountryCode: false,
@@ -401,8 +404,8 @@ class PhoneInput extends React.Component {
   formatNumber = (text, country) => {
     if (!country) return text;
 
-    const { format } = country;
-    const { disableCountryCode, enableAreaCodeStretch, enableLongNumbers, autoFormat } = this.props;
+    const { format, iso2 } = country;
+    const { disableCountryCode, enableAreaCodeStretch, enableLongNumbers, autoFormat, googleAutoFormat } = this.props;
 
     let pattern;
     if (disableCountryCode) {
@@ -421,6 +424,13 @@ class PhoneInput extends React.Component {
 
     if (!text || text.length === 0) {
       return disableCountryCode ? '' : this.props.prefix;
+    }
+
+    /**
+     * Handled using google-libphonenumberjs library
+     * */
+    if (googleAutoFormat) {
+      return disableCountryCode ? text : PhoneNumber.format(this.props.prefix+text, iso2);
     }
 
     // for all strings with length less than 3, just return it (1, 2 etc.)
