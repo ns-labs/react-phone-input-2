@@ -70,6 +70,12 @@ declare module "react-phone-input-2" {
     disabled?: boolean;
 
     autoFormat?: boolean;
+    /**
+     * Format using google-libphonenumberjs library
+     * instead of the default autoFormat.
+     * NOTE: Make sure to turn autoFormat false
+     * */
+    googleAutoFormat?: boolean;
     enableAreaCodes?: boolean;
     enableTerritories?: boolean;
 
